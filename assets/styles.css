@@ -375,34 +375,40 @@ img {
 .hero-tabs {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.02);
 }
 
-.hero-tabs span {
+.hero-tabs button {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   min-height: 60px;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.77rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  padding: 0 10px;
+  color: #f2f6f8;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   position: relative;
+  cursor: pointer;
+}
+
+.hero-tabs button:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.hero-tabs button:focus-visible {
+  outline: 2px solid var(--digimon-cyan);
+  outline-offset: -4px;
 }
 
 .hero-tabs .active {
   color: var(--digimon-cyan);
-}
-
-.hero-tabs .active::after {
-  content: "";
-  position: absolute;
-  inset: auto 22% 0 22%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--digimon-cyan) 0%, var(--digimon-pink) 100%);
-  border-radius: 999px;
 }
 
 .catalog-layout {
@@ -875,13 +881,9 @@ img {
     grid-template-columns: 1fr;
   }
 
-  .hero-tabs span {
+  .hero-tabs button {
     justify-content: flex-start;
     padding-left: 18px;
-  }
-
-  .hero-tabs .active::after {
-    inset: auto 14px 0 18px;
   }
 
   .catalog-layout {

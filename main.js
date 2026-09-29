@@ -3,6 +3,7 @@ const products = [
     name: 'Hunter Blade α',
     description: 'Espada larga + afinación wyvern',
     category: 'Armas',
+    collection: 'mh',
     rating: '4.8',
     oldPrice: '1.059,00',
     price: '899,00',
@@ -15,6 +16,7 @@ const products = [
     name: 'Rex Impact',
     description: 'Martillo pesado + golpe de carga',
     category: 'Armas',
+    collection: 'mh',
     rating: '4.8',
     oldPrice: '579,00',
     price: '389,00',
@@ -27,6 +29,7 @@ const products = [
     name: 'Rathalos X',
     description: 'Armadura de asalto + escudo',
     category: 'Armaduras',
+    collection: 'mh',
     rating: '4.7',
     oldPrice: '1.949,00',
     price: '1.249,00',
@@ -39,6 +42,7 @@ const products = [
     name: 'Digivice Nexus',
     description: 'Sincroniza con modos de batalla',
     category: 'Digivices',
+    collection: 'digimon',
     rating: '4.9',
     oldPrice: '649,00',
     price: '459,00',
@@ -51,6 +55,7 @@ const products = [
     name: 'Garras Lobo',
     description: 'Guantes de caza defensivos',
     category: 'Accesorios',
+    collection: 'mh',
     rating: '4.6',
     oldPrice: '49,95',
     price: '39,95',
@@ -63,6 +68,7 @@ const products = [
     name: 'Dragón Guard+',
     description: 'Botas reforzadas para boss fights',
     category: 'Armaduras',
+    collection: 'mh',
     rating: '4.7',
     oldPrice: '358,99',
     price: '249,99',
@@ -75,6 +81,7 @@ const products = [
     name: 'Omnimon Core',
     description: 'Reloj digital con modo digievolución',
     category: 'Digivices',
+    collection: 'digimon',
     rating: '4.8',
     oldPrice: '169,00',
     price: '119,00',
@@ -87,6 +94,7 @@ const products = [
     name: 'Bow of the Storm',
     description: 'Arco rápido con daño elemental',
     category: 'Armas',
+    collection: 'mh',
     rating: '4.5',
     oldPrice: '39,99',
     price: '29,99',
@@ -99,6 +107,7 @@ const products = [
     name: 'Agumon Pulse',
     description: 'Audífonos con modo de batalla',
     category: 'Accesorios',
+    collection: 'digimon',
     rating: '4.7',
     oldPrice: '35,99',
     price: '24,99',
@@ -111,6 +120,7 @@ const products = [
     name: 'Rogue Digimon Set',
     description: 'Pack de ataque + mochila táctica',
     category: 'Accesorios',
+    collection: 'digimon',
     rating: '4.9',
     oldPrice: '299,00',
     price: '219,00',
@@ -130,6 +140,7 @@ const categories = [
 ];
 
 const app = document.querySelector('#app');
+let activeCollection = 'all';
 
 function createProductCard(product) {
   return `
@@ -158,9 +169,11 @@ function createProductCard(product) {
 
 function renderProductList(productList) {
   const productGrid = document.querySelector('.product-grid');
+  const productCards = [];
+  productList.forEach((product) => productCards.push(createProductCard(product)));
   document.querySelector('#result-count').textContent = `${productList.length} productos`;
-  productGrid.innerHTML = productList.length
-    ? productList.map(createProductCard).join('')
+  productGrid.innerHTML = productCards.length
+    ? productCards.join('')
     : '<li class="empty-state">No hay productos que coincidan con la búsqueda.</li>';
 }
 
@@ -176,7 +189,8 @@ function applyFilters() {
   const matchingProducts = products.filter((product) => {
     const matchesSearch = `${product.name} ${product.description}`.toLocaleLowerCase('es').includes(searchTerm);
     const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
-    return matchesSearch && matchesCategory && product.priceAmount <= maxPrice;
+    const matchesCollection = activeCollection === 'all' || product.collection === activeCollection;
+    return matchesSearch && matchesCategory && matchesCollection && product.priceAmount <= maxPrice;
   });
 
   renderProductList(matchingProducts);
@@ -230,10 +244,10 @@ if (app) {
             </div>
           </div>
         </div>
-        <div class="hero-tabs" aria-label="Categorías destacadas">
-          <span class="active">Ofertas MH</span>
-          <span>Digivolutions</span>
-          <span>Todo para tu guild</span>
+        <div class="hero-tabs" role="group" aria-label="Colecciones destacadas">
+          <button class="collection-tab active" type="button" data-collection="all" aria-pressed="true">Todo para tu guild</button>
+          <button class="collection-tab" type="button" data-collection="mh" aria-pressed="false">Ofertas MH</button>
+          <button class="collection-tab" type="button" data-collection="digimon" aria-pressed="false">Digievolutions</button>
         </div>
       </section>
 
@@ -290,8 +304,6 @@ if (app) {
     </footer>
     <button class="chat-button" aria-label="Abrir chat">✦</button>`;
 
-  renderProductList(products);
-
   const categoryCards = [];
   const categoryFilters = [];
   categories.forEach((category) => {
@@ -313,10 +325,24 @@ if (app) {
   document.querySelector('.shop-categories').innerHTML = categoryCards.join('');
   document.querySelector('.filter-category-list').innerHTML = categoryFilters.join('');
 
+  const collectionTabs = document.querySelectorAll('.collection-tab');
+  collectionTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      activeCollection = tab.dataset.collection;
+      collectionTabs.forEach((collectionTab) => {
+        const isActive = collectionTab === tab;
+        collectionTab.classList.toggle('active', isActive);
+        collectionTab.setAttribute('aria-pressed', String(isActive));
+      });
+      applyFilters();
+    });
+  });
+
   const filterForm = document.querySelector('.filter-form');
   filterForm.addEventListener('input', applyFilters);
   document.querySelector('.clear-filters').addEventListener('click', () => {
     filterForm.reset();
     applyFilters();
   });
+  applyFilters();
 }
