@@ -184,7 +184,7 @@ function applyFilters() {
 
 if (app) {
   app.innerHTML = `
-    <div class="topbar">
+    <div class="topbar" id="site-top">
       <div class="topbar-inner">
         <span>¿Te vas a la caza? <strong>¡Selección de ofertas de Monster Hunter y Digimon!</strong></span>
       </div>
@@ -201,7 +201,6 @@ if (app) {
         </div>
         <nav class="main-nav" aria-label="Navegación principal">
           <a href="https://store.monsterhunter.com/" target="_blank" rel="noopener noreferrer">Ofertas de caza</a>
-          <a href="https://www.monsterhunter.com/" target="_blank" rel="noopener noreferrer">Contacto</a>
         </nav>
         <div class="header-icons" aria-label="Acciones de usuario">
           <button aria-label="Idioma">ES</button>
@@ -269,6 +268,26 @@ if (app) {
         </section>
       </div>
     </main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-main">
+          <section class="footer-about" id="quienes-somos" aria-labelledby="about-title">
+            <span class="footer-brand">MHxD</span>
+            <h2 id="about-title">Quiénes somos</h2>
+            <p>Somos una tienda de venta de accesorios y artículos para los que desean vivir aventuras épicas.</p>
+          </section>
+          <section class="footer-contact" id="contacto" aria-labelledby="contact-title">
+            <h2 id="contact-title">Contacto</h2>
+            <p>¿Buscas más información? Visita el sitio oficial de Monster Hunter.</p>
+            <a href="https://www.monsterhunter.com/" target="_blank" rel="noopener noreferrer">Ir al sitio oficial <span aria-hidden="true">↗</span></a>
+          </section>
+        </div>
+        <div class="footer-bottom">
+          <small>© ${new Date().getFullYear()} MHxD. Todos los derechos reservados.</small>
+          <a href="#site-top">Volver al inicio ↑</a>
+        </div>
+      </div>
+    </footer>
     <button class="chat-button" aria-label="Abrir chat">✦</button>`;
 
   renderProductList(products);
